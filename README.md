@@ -13,17 +13,18 @@ C:.
 │   main.go
 │   README.md
 │   taskmanager.db
-│   
+│
 └───internal
     ├───db
     │       db.go
     │       tasks.go
-    │       
+    │
     ├───handlers
     │       task.go
-    │       
+    │
     └───models
             task.go
+
 
 - `main.go` — точка входа, настройка маршрутов.
 - `internal/models` — структуры данных (`Tasks`).
