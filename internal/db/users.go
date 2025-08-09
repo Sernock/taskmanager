@@ -10,19 +10,6 @@ import (
 
 var ErrUserExists = errors.New("user already exists")
 
-func CreateUserTable(db *sql.DB) {
-	query := `CREATE TABLE IF NOT EXISTS users (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username TEXT NOT NULL UNIQUE,
-		password TEXT NOT NULL 
-	);`
-
-	_, err := db.Exec(query)
-	if err != nil {
-		log.Fatal("Failed to create users database:", err)
-	}
-}
-
 func InsertUser(db *sql.DB, user models.User) error {
 	query := `INSERT INTO users(username, password) VALUES (?, ?)`
 	_, err := db.Exec(query, user.Username, user.Password)
