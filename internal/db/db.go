@@ -16,7 +16,7 @@ func Connect() {
 		log.Fatal("Failed to connect database", err)
 	}
 
-	query := `
+	tasksTable := `
 	CREATE TABLE IF NOT EXISTS tasks (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		title TEXT NOT NULL,
@@ -24,12 +24,22 @@ func Connect() {
 		completed BOOLEAN NOT NULL CHECK (completed IN (0,1))
 	);
 	`
-	_, err = DB.Exec(query)
+	_, err = DB.Exec(tasksTable)
 	if err != nil {
 		log.Fatal("Failed to create tasks table", err)
-
 	}
 
-	log.Println("Database connected and tasks table ready")
+	usersTable := `
+	CREATE TABLE IF NOT EXISTS users (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		username TEXT NOT NULL UNIQUE,
+		password TEXT NOT NULL
+	);
+	`
+	_, err = DB.Exec(usersTable)
+	if err != nil {
+		log.Fatal("Failed to create users table", err)
+	}
 
+	log.Println("Database connected and tables ready")
 }

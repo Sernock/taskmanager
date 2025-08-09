@@ -1,12 +1,14 @@
+// db/users.go
 package db
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"taskmanager/internal/models"
-
-	_ "github.com/mattn/go-sqlite3"
 )
+
+var ErrUserExists = errors.New("user already exists")
 
 func CreateUserTable(db *sql.DB) {
 	query := `CREATE TABLE IF NOT EXISTS users (
@@ -17,15 +19,18 @@ func CreateUserTable(db *sql.DB) {
 
 	_, err := db.Exec(query)
 	if err != nil {
-		log.Fatal("Failed to create users database", err)
+		log.Fatal("Failed to create users database:", err)
 	}
 }
 
 func InsertUser(db *sql.DB, user models.User) error {
-	query := `INSERT into users(username, password) VALUES (?, ?)`
+	query := `INSERT INTO users(username, password) VALUES (?, ?)`
 	_, err := db.Exec(query, user.Username, user.Password)
 	if err != nil {
-		log.Println("Failed to add user", err)
+		if err.Error() == "UNIQUE constraint failed: users.username" {
+			return ErrUserExists
+		}
+		log.Println("Failed to add user:", err)
 		return err
 	}
 	return nil
@@ -37,10 +42,7 @@ func GetUserByName(db *sql.DB, username string) (models.User, error) {
 	row := db.QueryRow(query, username)
 	err := row.Scan(&user.Id, &user.Username, &user.Password)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return user, nil
-		}
-		return user, err
+		return user, err // если no rows, вернётся sql.ErrNoRows
 	}
 	return user, nil
 }
