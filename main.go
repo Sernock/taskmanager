@@ -25,6 +25,10 @@ func main() {
 
 	r := gin.Default()
 
+	go handlers.StartWebSocketHub()
+
+	r.GET("/ws", handlers.WebSocketHandler)
+
 	r.POST("/register", handlers.Register)
 	r.POST("/login", handlers.Login(jwtSecret))
 
