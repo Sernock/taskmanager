@@ -1,6 +1,6 @@
 # TaskManager
 
-**TaskManager** — простой REST API для управления задачами, написанный на Go с использованием фреймворка [Gin](https://github.com/gin-gonic/gin) и JWT-аутентификации.
+**TaskManager** — простой REST API для управления задачами, написанный на Go с использованием фреймворка [Gin](https://github.com/gin-gonic/gin) JWT-аутентификации и интерграцией WebSockets для отправки сообщений в живом времени.
 
 ---
 
